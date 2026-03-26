@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.DS_Store
+PROJECT_CONTEXT.md
+INTERVIEW_PREP_BILINGUAL.md
+outputs/*
+!outputs/.gitkeep
+!outputs/metrics.json
+!outputs/run_summary.json
+!outputs/threshold_report.json
+!outputs/manifest.json

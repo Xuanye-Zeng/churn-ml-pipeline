@@ -1,0 +1,18 @@
+{
+  "dataset_rows": 7043,
+  "train_rows": 5634,
+  "test_rows": 1409,
+  "target_positive_rate": 0.2654,
+  "selected_model": "logistic_regression",
+  "selected_framework": "scikit-learn",
+  "selection_metric": "f1",
+  "run_dir": "outputs/runs/20260326T211010Z",
+  "best_model_artifact": "outputs/runs/20260326T211010Z/best_model.pkl",
+  "threshold_report_path": "outputs/runs/20260326T211010Z/threshold_report.json",
+  "manifest_path": "outputs/runs/20260326T211010Z/manifest.json",
+  "models_evaluated": [
+    "logistic_regression",
+    "random_forest",
+    "torch_mlp"
+  ]
+}
