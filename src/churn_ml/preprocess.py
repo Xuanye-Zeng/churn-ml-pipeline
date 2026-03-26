@@ -7,6 +7,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 def prepare_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     prepared = df.copy()
+    # TotalCharges is stored as string in the raw CSV, with some blank values
     prepared["TotalCharges"] = pd.to_numeric(prepared["TotalCharges"], errors="coerce")
     prepared["Churn"] = prepared["Churn"].map({"Yes": 1, "No": 0})
     return prepared

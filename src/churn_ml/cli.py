@@ -46,6 +46,8 @@ def run_pipeline(config_path: str | None = None) -> dict:
     else:
         source_dataset_path = download_dataset(config["data_url"], run_paths.dataset_path)
 
+    # Copy dataset into the run directory (for traceability) and to the
+    # output root (as a convenience pointer for batch prediction).
     if source_dataset_path.resolve() != run_paths.dataset_path.resolve():
         shutil.copy2(source_dataset_path, run_paths.dataset_path)
     shutil.copy2(source_dataset_path, run_paths.output_dir / "dataset.csv")
