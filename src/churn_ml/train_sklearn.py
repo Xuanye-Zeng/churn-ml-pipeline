@@ -49,40 +49,38 @@ def train_sklearn_models(config: dict, preprocessor, X_train, X_test, y_train, y
         cv_summary = None
 
         if cv_enabled:
+            # Clamp folds to minority class size to avoid StratifiedKFold errors
             class_counts = y_train.value_counts()
             max_supported_folds = int(class_counts.min())
             effective_folds = min(cv_folds, max_supported_folds)
 
-            if effective_folds < 2:
-                effective_folds = 0
-
-        if cv_enabled and effective_folds >= 2:
-            cv_pipeline = Pipeline(
-                steps=[
-                    ("preprocessor", clone(preprocessor)),
-                    ("model", estimator),
-                ]
-            )
-            cv = StratifiedKFold(
-                n_splits=effective_folds,
-                shuffle=True,
-                random_state=config["random_state"],
-            )
-            cv_results = cross_validate(
-                cv_pipeline,
-                X_train,
-                y_train,
-                cv=cv,
-                scoring=scoring,
-                n_jobs=None,
-            )
-            cv_summary = summarize_cv_scores(
-                {
-                    metric_name.replace("test_", ""): values
-                    for metric_name, values in cv_results.items()
-                    if metric_name.startswith("test_")
-                }
-            )
+            if effective_folds >= 2:
+                cv_pipeline = Pipeline(
+                    steps=[
+                        ("preprocessor", clone(preprocessor)),
+                        ("model", estimator),
+                    ]
+                )
+                cv = StratifiedKFold(
+                    n_splits=effective_folds,
+                    shuffle=True,
+                    random_state=config["random_state"],
+                )
+                cv_results = cross_validate(
+                    cv_pipeline,
+                    X_train,
+                    y_train,
+                    cv=cv,
+                    scoring=scoring,
+                    n_jobs=None,
+                )
+                cv_summary = summarize_cv_scores(
+                    {
+                        metric_name.replace("test_", ""): values
+                        for metric_name, values in cv_results.items()
+                        if metric_name.startswith("test_")
+                    }
+                )
 
         results[model_name] = {
             "framework": "scikit-learn",
