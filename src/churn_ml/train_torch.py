@@ -95,7 +95,11 @@ def train_torch_model(config: dict, preprocessor, X_train, X_test, y_train, y_te
         lr=torch_config.get("learning_rate", 0.001),
         weight_decay=torch_config.get("weight_decay", 0.0001),
     )
-    criterion = nn.BCEWithLogitsLoss()
+    # Weight positive class to match sklearn class_weight="balanced" behavior
+    pos_count = float(y_train_sub.sum())
+    neg_count = float(len(y_train_sub) - pos_count)
+    pos_weight = torch.tensor([neg_count / pos_count]) if pos_count > 0 else torch.tensor([1.0])
+    criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     patience = torch_config.get("early_stopping_patience", 4)
     min_delta = torch_config.get("min_delta", 0.0005)
     best_val_loss = float("inf")

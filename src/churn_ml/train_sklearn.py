@@ -14,6 +14,7 @@ def candidate_models(config: dict):
         models["logistic_regression"] = LogisticRegression(
             max_iter=logistic_config.get("max_iter", 2000),
             random_state=config["random_state"],
+            class_weight="balanced",
         )
 
     forest_config = config["models"]["random_forest"]
@@ -23,6 +24,7 @@ def candidate_models(config: dict):
             max_depth=forest_config.get("max_depth", 8),
             min_samples_leaf=forest_config.get("min_samples_leaf", 2),
             random_state=config["random_state"],
+            class_weight="balanced",
         )
 
     return models
