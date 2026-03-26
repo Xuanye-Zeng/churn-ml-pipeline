@@ -100,6 +100,12 @@ customer-churn-ml-pipeline/
 .venv/bin/python src/pipeline.py --config configs/default.json
 ```
 
+Equivalent:
+
+```bash
+make train
+```
+
 Top-level outputs:
 
 - `outputs/metrics.json`
@@ -116,6 +122,12 @@ Each run also writes a timestamped directory under `outputs/runs/<run_id>/`.
 .venv/bin/python src/predict.py --model-path outputs/best_model.pkl --input-csv outputs/dataset.csv --output-csv outputs/predictions.csv
 ```
 
+Equivalent:
+
+```bash
+make predict
+```
+
 Prediction output adds:
 
 - `churn_probability`
@@ -129,10 +141,22 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Equivalent:
+
+```bash
+make setup
+```
+
 ## 🧪 Run Tests
 
 ```bash
 .venv/bin/python -m pytest tests
+```
+
+Equivalent:
+
+```bash
+make test
 ```
 
 ## 📦 Docker
