@@ -64,8 +64,12 @@ def train_torch_model(config: dict, preprocessor, X_train, X_test, y_train, y_te
 
     set_torch_seed(config["random_state"])
     X_train_sub, X_val, y_train_sub, y_val = _split_torch_training_data(config, X_train, y_train)
+
+    # Fit preprocessor on full X_train (not the subset) so feature transformations
+    # are consistent with the sklearn path and use all available training data.
     fitted_preprocessor = clone(preprocessor)
-    X_train_transformed = to_dense_array(fitted_preprocessor.fit_transform(X_train_sub))
+    fitted_preprocessor.fit(X_train)
+    X_train_transformed = to_dense_array(fitted_preprocessor.transform(X_train_sub))
     X_test_transformed = to_dense_array(fitted_preprocessor.transform(X_test))
     X_val_transformed = (
         to_dense_array(fitted_preprocessor.transform(X_val)) if X_val is not None else None

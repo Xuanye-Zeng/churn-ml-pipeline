@@ -15,7 +15,8 @@ def load_sklearn_bundle(model_path: Path):
 
 
 def load_torch_bundle(model_path: Path):
-    checkpoint = torch.load(model_path, map_location="cpu")
+    # weights_only=False because the checkpoint includes a sklearn preprocessor
+    checkpoint = torch.load(model_path, map_location="cpu", weights_only=False)
     model = ChurnMLP(
         input_dim=checkpoint["input_dim"],
         hidden_dims=checkpoint["hidden_dims"],
