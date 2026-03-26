@@ -63,30 +63,38 @@ Evaluation notes:
 customer-churn-ml-pipeline/
   README.md
   technical_design.md
+  INTERVIEW_PREP_BILINGUAL.md
   requirements.txt
-  .gitignore
+  Makefile
   Dockerfile
+  .gitignore
   configs/
     default.json
+    smoke_test.json
   src/
-    pipeline.py
+    pipeline.py            # training entrypoint
+    predict.py             # batch prediction entrypoint
     churn_ml/
       cli.py
       config.py
+      constants.py
       ingest.py
-      predict.py
+      validate.py
       preprocess.py
       train_sklearn.py
       train_torch.py
-      validate.py
+      evaluate.py
+      artifacts.py
+      predict.py
   outputs/
-    .gitkeep
-    manifest.json
     metrics.json
     run_summary.json
     threshold_report.json
+    manifest.json
     runs/
   tests/
+    test_validate.py
+    test_train_smoke.py
     fixtures/
       tiny_churn.csv
   .github/
@@ -194,9 +202,7 @@ A notebook or a single script would have been faster to build. This repository c
 
 ## 🧭 Possible Extensions
 
-If expanded further, the next practical improvements would be:
-
-- lightweight experiment tracking
-- local Ray-based hyperparameter tuning
-- richer data quality and drift monitoring
-- fuller model serving or API-based inference
+- hyperparameter tuning (e.g. local Ray Tune)
+- drift monitoring between runs
+- API-based inference endpoint
+- class-weight tuning or resampling for imbalance

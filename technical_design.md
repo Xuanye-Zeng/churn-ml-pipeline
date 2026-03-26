@@ -192,12 +192,10 @@ These do not make the project production-ready, but they do make it more credibl
 
 ## 🧭 Next Improvements
 
-Natural next steps:
-
-- local Ray-based hyperparameter tuning
-- richer drift reporting between runs
-- stronger experiment tracking beyond JSON artifacts
-- API-based or service-based inference
+- hyperparameter tuning (e.g. local Ray Tune)
+- class-weight tuning or resampling for imbalance
+- drift comparison between runs
+- API-based inference endpoint
 
 ## 🧾 Summary
 
