@@ -1,0 +1,16 @@
+{
+  "dataset_path": "tests/fixtures/tiny_churn.csv",
+  "output_dir": "outputs",
+  "cross_validation": {
+    "enabled": true,
+    "folds": 3
+  },
+  "torch": {
+    "enabled": true,
+    "epochs": 6,
+    "batch_size": 4,
+    "hidden_dims": [16, 8],
+    "validation_split": 0.25,
+    "early_stopping_patience": 2
+  }
+}

@@ -106,6 +106,12 @@ Equivalent:
 make train
 ```
 
+For a quick local smoke run without downloading the full dataset:
+
+```bash
+.venv/bin/python src/pipeline.py --config configs/smoke_test.json
+```
+
 Top-level outputs:
 
 - `outputs/metrics.json`
