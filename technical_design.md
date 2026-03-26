@@ -155,7 +155,7 @@ Latest run summary:
 - train rows: `5634`
 - test rows: `1409`
 - target positive rate: `0.2654`
-- selected model: `logistic_regression`
+- selected model: `random_forest`
 - selected framework: `scikit-learn`
 - selection metric: `f1`
 
@@ -163,16 +163,16 @@ Held-out test metrics:
 
 | Model | Accuracy | Precision | Recall | F1 | ROC AUC |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `logistic_regression` | 0.8055 | 0.6572 | 0.5588 | 0.6040 | 0.8419 |
-| `random_forest` | 0.8055 | 0.6799 | 0.5053 | 0.5798 | 0.8423 |
-| `torch_mlp` | 0.8020 | 0.6471 | 0.5588 | 0.5997 | 0.8395 |
+| `logistic_regression` | 0.7381 | 0.5043 | 0.7834 | 0.6136 | 0.8413 |
+| `random_forest` | 0.7544 | 0.5258 | 0.7620 | 0.6223 | 0.8411 |
+| `torch_mlp` | 0.7424 | 0.5098 | 0.7647 | 0.6118 | 0.8363 |
 
 Additional notes:
 
-- `logistic_regression` also leads the sklearn models on cross-validation F1 mean
-- the selected model's best F1 threshold is `0.25`, compared with the default `0.5`
-- lowering the threshold improves recall and slightly improves F1, while reducing precision and accuracy
-- the PyTorch baseline benefited from validation-based checkpoint selection, but still did not beat logistic regression on this dataset
+- all models use `class_weight="balanced"` (or equivalent `pos_weight` for PyTorch), trading accuracy for recall
+- `random_forest` leads on both held-out F1 and cross-validation F1 mean
+- the selected model's best F1 threshold is `0.55`, close to the default `0.5`
+- the PyTorch baseline benefited from validation-based checkpoint selection but still did not beat the sklearn models on this dataset
 
 ## ⚖️ Main Trade-off
 

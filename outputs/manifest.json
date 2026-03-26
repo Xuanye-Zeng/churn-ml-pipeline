@@ -1,6 +1,6 @@
 {
-  "run_id": "20260326T215257Z",
-  "created_at_utc": "2026-03-26T21:53:01.492984+00:00",
+  "run_id": "20260326T223059Z",
+  "created_at_utc": "2026-03-26T22:31:03.634450+00:00",
   "config": {
     "data_url": "https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv",
     "dataset_path": null,
@@ -8,6 +8,10 @@
     "selection_metric": "f1",
     "test_size": 0.2,
     "random_state": 42,
+    "cross_validation": {
+      "enabled": true,
+      "folds": 5
+    },
     "torch": {
       "enabled": true,
       "epochs": 20,
@@ -34,23 +38,19 @@
         "max_depth": 8,
         "min_samples_leaf": 2
       }
-    },
-    "cross_validation": {
-      "enabled": true,
-      "folds": 5
     }
   },
-  "selected_model": "logistic_regression",
+  "selected_model": "random_forest",
   "selected_framework": "scikit-learn",
   "selection_metric": "f1",
   "artifact_paths": {
-    "run_dir": "outputs/runs/20260326T215257Z",
-    "dataset": "outputs/runs/20260326T215257Z/dataset.csv",
-    "metrics": "outputs/runs/20260326T215257Z/metrics.json",
-    "run_summary": "outputs/runs/20260326T215257Z/run_summary.json",
-    "data_quality_report": "outputs/runs/20260326T215257Z/data_quality_report.json",
-    "threshold_report": "outputs/runs/20260326T215257Z/threshold_report.json",
-    "model": "outputs/runs/20260326T215257Z/best_model.pkl"
+    "run_dir": "outputs/runs/20260326T223059Z",
+    "dataset": "outputs/runs/20260326T223059Z/dataset.csv",
+    "metrics": "outputs/runs/20260326T223059Z/metrics.json",
+    "run_summary": "outputs/runs/20260326T223059Z/run_summary.json",
+    "data_quality_report": "outputs/runs/20260326T223059Z/data_quality_report.json",
+    "threshold_report": "outputs/runs/20260326T223059Z/threshold_report.json",
+    "model": "outputs/runs/20260326T223059Z/best_model.pkl"
   },
   "dependency_versions": {
     "pandas": "3.0.1",
