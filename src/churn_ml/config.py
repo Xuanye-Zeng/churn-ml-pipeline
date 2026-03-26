@@ -10,6 +10,10 @@ DEFAULT_CONFIG = {
     "selection_metric": "f1",
     "test_size": 0.2,
     "random_state": 42,
+    "cross_validation": {
+        "enabled": True,
+        "folds": 5,
+    },
     "torch": {
         "enabled": True,
         "epochs": 20,
@@ -18,6 +22,9 @@ DEFAULT_CONFIG = {
         "hidden_dims": [128, 64],
         "dropout": 0.1,
         "weight_decay": 0.0001,
+        "validation_split": 0.2,
+        "early_stopping_patience": 4,
+        "min_delta": 0.0005,
     },
     "models": {
         "logistic_regression": {
