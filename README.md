@@ -112,6 +112,12 @@ For a quick local smoke run without downloading the full dataset:
 .venv/bin/python src/pipeline.py --config configs/smoke_test.json
 ```
 
+Or:
+
+```bash
+make smoke
+```
+
 Top-level outputs:
 
 - `outputs/metrics.json`

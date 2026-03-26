@@ -1,6 +1,6 @@
 PYTHON := .venv/bin/python
 
-.PHONY: setup train test predict
+.PHONY: setup train smoke test predict
 
 setup:
 	python3 -m venv .venv
@@ -8,6 +8,9 @@ setup:
 
 train:
 	$(PYTHON) src/pipeline.py --config configs/default.json
+
+smoke:
+	$(PYTHON) src/pipeline.py --config configs/smoke_test.json
 
 test:
 	$(PYTHON) -m pytest tests
