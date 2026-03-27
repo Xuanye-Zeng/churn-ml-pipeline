@@ -12,7 +12,9 @@ The scope is intentionally narrow: one dataset, one training entrypoint, a small
 - schema and data-quality validation
 - shared preprocessing
 - sklearn and PyTorch training paths
+- Ray Tune hyperparameter search
 - model comparison and selection
+- drift monitoring between runs
 - run artifact generation
 - batch prediction from saved artifacts
 
@@ -95,7 +97,30 @@ The PyTorch path includes:
 
 This makes the neural baseline easier to discuss in terms of overfitting and training stability.
 
-### 5. 📏 Evaluation
+### 5. 🔧 Hyperparameter Tuning
+
+When tuning is enabled, the pipeline uses Ray Tune to search hyperparameters for the sklearn models before final training. Each trial runs stratified cross-validation on the training set and reports F1. The best parameters are merged back into the config so the final models use tuned values.
+
+Search spaces:
+
+- `logistic_regression`: `C` (loguniform 0.01–10)
+- `random_forest`: `n_estimators`, `max_depth`, `min_samples_leaf`
+
+The search uses random sampling (20 trials by default). Ray parallelizes trials across available CPU cores.
+
+The torch model is not tuned — it uses fixed config and serves as a framework-integration baseline.
+
+### 6. 📊 Drift Monitoring
+
+After validation, the pipeline compares the current run's data quality report with the previous run's. It checks:
+
+- row count changes (flagged if >10% change)
+- target distribution shift (flagged if positive rate changes by >5%)
+- per-column missing rate changes (flagged if any column changes by >1%)
+
+The drift report is saved per-run. If there is no previous run, drift monitoring is skipped.
+
+### 7. 📏 Evaluation
 
 All models report the same metrics:
 
@@ -114,7 +139,7 @@ This separates two decisions that are often conflated:
 - which model is best
 - which prediction threshold is best for a given trade-off
 
-### 6. 📦 Artifacts
+### 8. 📦 Artifacts
 
 Each run writes a timestamped directory under `outputs/runs/<run_id>/` with:
 
@@ -136,7 +161,7 @@ The repository also keeps latest-run pointers at the top level:
 
 The manifest records config values, selected model, artifact paths, and dependency versions so a run can be traced without opening code.
 
-### 7. 🔮 Prediction Path
+### 9. 🔮 Prediction Path
 
 The repository includes a batch prediction entrypoint that loads a saved model artifact and writes predictions for an input CSV.
 
@@ -158,21 +183,23 @@ Latest run summary:
 - selected model: `random_forest`
 - selected framework: `scikit-learn`
 - selection metric: `f1`
+- tuning: Ray Tune random search, 20 trials per sklearn model
 
 Held-out test metrics:
 
 | Model | Accuracy | Precision | Recall | F1 | ROC AUC |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `logistic_regression` | 0.7381 | 0.5043 | 0.7834 | 0.6136 | 0.8413 |
-| `random_forest` | 0.7544 | 0.5258 | 0.7620 | 0.6223 | 0.8411 |
+| `logistic_regression` | 0.7445 | 0.5123 | 0.7807 | 0.6186 | 0.8397 |
+| `random_forest` | 0.7658 | 0.5420 | 0.7594 | 0.6325 | 0.8428 |
 | `torch_mlp` | 0.7424 | 0.5098 | 0.7647 | 0.6118 | 0.8363 |
 
 Additional notes:
 
 - all models use `class_weight="balanced"` (or equivalent `pos_weight` for PyTorch), trading accuracy for recall
+- sklearn hyperparameters are tuned via Ray Tune; the torch model uses fixed config as a baseline
 - `random_forest` leads on both held-out F1 and cross-validation F1 mean
-- the selected model's best F1 threshold is `0.55`, close to the default `0.5`
-- the PyTorch baseline benefited from validation-based checkpoint selection but still did not beat the sklearn models on this dataset
+- the selected model's best F1 threshold is `0.45`, close to the default `0.5`
+- the PyTorch baseline benefited from validation-based checkpoint selection but still did not beat the sklearn models
 
 ## ⚖️ Main Trade-off
 
@@ -192,10 +219,10 @@ These do not make the project production-ready, but they do make it more credibl
 
 ## 🧭 Next Improvements
 
-- hyperparameter tuning (e.g. local Ray Tune)
-- class-weight tuning or resampling for imbalance
-- drift comparison between runs
+- probability calibration
+- richer drift reporting (feature-level distribution tests)
 - API-based inference endpoint
+- learning-rate scheduling for PyTorch path
 
 ## 🧾 Summary
 

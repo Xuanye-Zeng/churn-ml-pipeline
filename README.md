@@ -36,26 +36,29 @@ modelStep --> predictStep[BatchPredictionEntry]
 - schema and data-quality validation
 - shared preprocessing for numeric and categorical features
 - sklearn and PyTorch baseline comparison
+- Ray Tune hyperparameter search
 - cross-validation and threshold analysis
+- drift monitoring between runs
 - per-run artifacts and run manifest
 - simple batch prediction entrypoint
-- tests, CI, and Docker
+- tests, CI, and multi-stage Docker
 
 ## 📊 Current Result
 
-The latest run selects `random_forest` as the best model by held-out test `f1`.
+The latest run selects `random_forest` as the best model by held-out test `f1`, after Ray Tune hyperparameter search.
 
 | Model | Accuracy | Precision | Recall | F1 | ROC AUC |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `logistic_regression` | 0.7381 | 0.5043 | 0.7834 | 0.6136 | 0.8413 |
-| `random_forest` | 0.7544 | 0.5258 | 0.7620 | 0.6223 | 0.8411 |
+| `logistic_regression` | 0.7445 | 0.5123 | 0.7807 | 0.6186 | 0.8397 |
+| `random_forest` | 0.7658 | 0.5420 | 0.7594 | 0.6325 | 0.8428 |
 | `torch_mlp` | 0.7424 | 0.5098 | 0.7647 | 0.6118 | 0.8363 |
 
 Evaluation notes:
 
 - all models use `class_weight="balanced"` (or equivalent `pos_weight` for PyTorch), which improves recall at the cost of accuracy
+- sklearn model hyperparameters are tuned via Ray Tune random search (20 trials per model)
 - `random_forest` leads on both held-out F1 and cross-validation F1 mean
-- the best F1 threshold for the selected model is `0.55`, close to the default `0.5`
+- the best F1 threshold for the selected model is `0.45`, close to the default `0.5`
 
 ## 📁 Repository Structure
 
@@ -70,6 +73,7 @@ customer-churn-ml-pipeline/
   .gitignore
   configs/
     default.json
+    tune.json
     smoke_test.json
   src/
     pipeline.py            # training entrypoint
@@ -78,6 +82,7 @@ customer-churn-ml-pipeline/
       cli.py
       config.py
       constants.py
+      drift.py
       ingest.py
       validate.py
       preprocess.py
@@ -85,6 +90,7 @@ customer-churn-ml-pipeline/
       train_torch.py
       evaluate.py
       artifacts.py
+      tune.py
       predict.py
   outputs/
     metrics.json
@@ -124,6 +130,18 @@ Or:
 
 ```bash
 make smoke
+```
+
+To run with Ray Tune hyperparameter search enabled:
+
+```bash
+.venv/bin/python src/pipeline.py --config configs/tune.json
+```
+
+Or:
+
+```bash
+make tune
 ```
 
 Top-level outputs:
@@ -202,7 +220,7 @@ A notebook or a single script would have been faster to build. This repository c
 
 ## 🧭 Possible Extensions
 
-- hyperparameter tuning (e.g. local Ray Tune)
-- drift monitoring between runs
+- probability calibration
+- richer drift reporting (feature-level distribution tests)
 - API-based inference endpoint
-- class-weight tuning or resampling for imbalance
+- learning-rate scheduling for PyTorch path

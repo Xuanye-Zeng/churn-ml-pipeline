@@ -1,63 +1,63 @@
 {
   "logistic_regression": {
     "test_metrics": {
-      "accuracy": 0.7381,
-      "precision": 0.5043,
-      "recall": 0.7834,
-      "f1": 0.6136,
-      "roc_auc": 0.8413
+      "accuracy": 0.7445,
+      "precision": 0.5123,
+      "recall": 0.7807,
+      "f1": 0.6186,
+      "roc_auc": 0.8397
     },
     "cross_validation": {
       "accuracy": {
-        "mean": 0.7481,
-        "std": 0.0153
+        "mean": 0.7524,
+        "std": 0.0117
       },
       "precision": {
-        "mean": 0.5165,
-        "std": 0.0189
+        "mean": 0.5219,
+        "std": 0.0146
       },
       "recall": {
-        "mean": 0.8013,
-        "std": 0.0379
+        "mean": 0.7946,
+        "std": 0.0328
       },
       "f1": {
-        "mean": 0.6279,
-        "std": 0.0232
+        "mean": 0.6299,
+        "std": 0.0193
       },
       "roc_auc": {
-        "mean": 0.8459,
-        "std": 0.0124
+        "mean": 0.8449,
+        "std": 0.0115
       }
     }
   },
   "random_forest": {
     "test_metrics": {
-      "accuracy": 0.7544,
-      "precision": 0.5258,
-      "recall": 0.762,
-      "f1": 0.6223,
-      "roc_auc": 0.8411
+      "accuracy": 0.7658,
+      "precision": 0.542,
+      "recall": 0.7594,
+      "f1": 0.6325,
+      "roc_auc": 0.8428
     },
     "cross_validation": {
       "accuracy": {
-        "mean": 0.7652,
-        "std": 0.0103
+        "mean": 0.7675,
+        "std": 0.0094
       },
       "precision": {
-        "mean": 0.5411,
-        "std": 0.0149
+        "mean": 0.545,
+        "std": 0.0133
       },
       "recall": {
-        "mean": 0.7639,
-        "std": 0.0262
+        "mean": 0.7505,
+        "std": 0.0292
       },
       "f1": {
-        "mean": 0.6332,
-        "std": 0.0137
+        "mean": 0.6313,
+        "std": 0.0168
       },
       "roc_auc": {
-        "mean": 0.8466,
-        "std": 0.0091
+        "mean": 0.8463,
+        "std": 0.0095
       }
     }
   },
