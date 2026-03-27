@@ -20,6 +20,8 @@ class RunPaths:
     threshold_report_path: Path
     manifest_path: Path
     selected_model_path: Path
+    tune_results_path: Path
+    drift_report_path: Path
     latest_metrics_path: Path
     latest_summary_path: Path
     latest_threshold_report_path: Path
@@ -42,6 +44,8 @@ def build_run_paths(output_dir: str) -> RunPaths:
         threshold_report_path=run_dir / "threshold_report.json",
         manifest_path=run_dir / "manifest.json",
         selected_model_path=run_dir / "best_model",
+        tune_results_path=run_dir / "tune_results.json",
+        drift_report_path=run_dir / "drift_report.json",
         latest_metrics_path=base_output_dir / "metrics.json",
         latest_summary_path=base_output_dir / "run_summary.json",
         latest_threshold_report_path=base_output_dir / "threshold_report.json",

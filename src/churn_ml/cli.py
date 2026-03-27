@@ -6,11 +6,13 @@ from sklearn.model_selection import train_test_split
 
 from churn_ml.artifacts import build_run_manifest, build_run_paths, save_model_artifact, write_json
 from churn_ml.config import load_config
+from churn_ml.drift import build_drift_report
 from churn_ml.evaluate import build_threshold_report
 from churn_ml.ingest import download_dataset, ensure_directory, load_dataset
 from churn_ml.preprocess import build_features_and_target, build_preprocessor, prepare_dataframe
 from churn_ml.train_sklearn import train_sklearn_models
 from churn_ml.train_torch import train_torch_model
+from churn_ml.tune import apply_tuned_params, run_tuning
 from churn_ml.validate import build_data_quality_report, validate_dataset
 
 
@@ -57,6 +59,11 @@ def run_pipeline(config_path: str | None = None) -> dict:
     data_quality_report = build_data_quality_report(raw_df)
     write_json(run_paths.data_quality_path, data_quality_report)
 
+    # Compare with previous run if one exists
+    drift_report = build_drift_report(run_paths, data_quality_report)
+    if drift_report is not None:
+        write_json(run_paths.drift_report_path, drift_report)
+
     prepared_df = prepare_dataframe(raw_df)
     X, y = build_features_and_target(prepared_df)
     X_train, X_test, y_train, y_test = train_test_split(
@@ -68,6 +75,13 @@ def run_pipeline(config_path: str | None = None) -> dict:
     )
 
     preprocessor = build_preprocessor(X_train)
+
+    # Optional: tune hyperparameters before training
+    tune_results = run_tuning(config, preprocessor, X_train, y_train)
+    if tune_results:
+        config = apply_tuned_params(config, tune_results)
+        write_json(run_paths.tune_results_path, tune_results)
+
     model_results = train_sklearn_models(config, preprocessor, X_train, X_test, y_train, y_test)
     model_results.update(train_torch_model(config, preprocessor, X_train, X_test, y_train, y_test))
 

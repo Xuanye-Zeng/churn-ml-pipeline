@@ -12,6 +12,7 @@ def candidate_models(config: dict):
     logistic_config = config["models"]["logistic_regression"]
     if logistic_config.get("enabled", True):
         models["logistic_regression"] = LogisticRegression(
+            C=logistic_config.get("C", 1.0),
             max_iter=logistic_config.get("max_iter", 2000),
             random_state=config["random_state"],
             class_weight="balanced",

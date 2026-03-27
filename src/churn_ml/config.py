@@ -14,6 +14,11 @@ DEFAULT_CONFIG = {
         "enabled": True,
         "folds": 5,
     },
+    "tuning": {
+        "enabled": False,
+        "num_samples": 20,
+        "cv_folds": 3,
+    },
     "torch": {
         "enabled": True,
         "epochs": 20,
