@@ -32,10 +32,12 @@ This dataset is a good fit for a compact training pipeline: public, tabular, and
 flowchart LR
 configStep[ConfigAndCLI] --> ingestStep[LoadOrDownloadDataset]
 ingestStep --> validateStep[ValidateAndProfileData]
-validateStep --> prepStep[PreprocessFeatures]
+validateStep --> driftStep[DriftMonitoring]
+driftStep --> prepStep[PreprocessFeatures]
 prepStep --> splitStep[TrainTestSplit]
 
-splitStep --> skStep[TrainSklearnModels]
+splitStep --> tuneStep[RayTuneHyperparamSearch]
+tuneStep --> skStep[TrainSklearnModels]
 splitStep --> torchStep[TrainTorchMLP]
 
 skStep --> compareStep[CompareMetricsAndSelectModel]
@@ -46,7 +48,7 @@ metricsStep --> modelStep[SaveSelectedModel]
 modelStep --> predictStep[BatchPredictionEntry]
 ```
 
-Main path: config -> ingestion -> validation -> preprocessing -> split -> train -> compare -> artifacts -> prediction.
+Main path: config -> ingestion -> validation -> drift check -> preprocessing -> split -> tune -> train -> compare -> artifacts -> prediction.
 
 ## 🧩 Main Components
 

@@ -10,10 +10,12 @@ The project is intentionally small, but structured like a real training workflow
 flowchart LR
 configStep[ConfigAndCLI] --> ingestStep[LoadOrDownloadDataset]
 ingestStep --> validateStep[ValidateAndProfileData]
-validateStep --> prepStep[PreprocessFeatures]
+validateStep --> driftStep[DriftMonitoring]
+driftStep --> prepStep[PreprocessFeatures]
 prepStep --> splitStep[TrainTestSplit]
 
-splitStep --> skStep[TrainSklearnModels]
+splitStep --> tuneStep[RayTuneHyperparamSearch]
+tuneStep --> skStep[TrainSklearnModels]
 splitStep --> torchStep[TrainTorchMLP]
 
 skStep --> compareStep[CompareMetricsAndSelectModel]
